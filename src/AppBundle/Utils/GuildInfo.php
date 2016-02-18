@@ -14,9 +14,10 @@ class GuildInfo
     private $name;
     private $realm;
     private $level;
+    private $points;
 
     /**
-     * @return
+     * @return mixed
      */
     public function getName()
     {
@@ -63,5 +64,20 @@ class GuildInfo
         $this->level = $level;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param mixed $points
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
+    }
 
 }

@@ -11,7 +11,6 @@ namespace AppBundle\Utils;
 
 class APICall
 {
-
     private static $URL = "https://eu.api.battle.net/wow/";
     private static $APIKEY = "e926wn2xzdpby6qfnfgc3kxa74xpf2qt";
 
@@ -26,8 +25,8 @@ class APICall
         $guild->setName($json['name']);
         $guild->setRealm($json['realm']);
         $guild->setLevel($json['level']);
+        $guild->setPoints($json['achievementPoints']);
         return $guild;
     }
-
 
 }

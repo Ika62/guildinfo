@@ -11,7 +11,57 @@ namespace AppBundle\Utils;
 
 class GuildInfo
 {
-    public $name;
-    public $realm;
-    public $level;
+    private $name;
+    private $realm;
+    private $level;
+
+    /**
+     * @return
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRealm()
+    {
+        return $this->realm;
+    }
+
+    /**
+     * @param mixed $realm
+     */
+    public function setRealm($realm)
+    {
+        $this->realm = $realm;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param mixed $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
+
+
 }

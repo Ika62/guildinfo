@@ -19,8 +19,7 @@ class APICall
      * @return GuildInfo
      */
     public static function getGuildBasicInfo($name="Ave%20Tenebrae", $server="Conseil%20des%20Ombres", $locale="fr_FR") {
-        //$url = self::$URL . 'guild/' . $server . '/' . $name . '?locale='.$locale.'&apikey='. self::$APIKEY;
-        $url = self::$URL . "guild/$server/$name?locale=fr_FR&apikey=e926wn2xzdpby6qfnfgc3kxa74xpf2qt";
+        $url = self::$URL . "guild/$server/$name?locale=$locale&apikey=".self::$APIKEY;
         $result = file_get_contents($url);
         $json = json_decode($result, true);
         $guild = new GuildInfo();

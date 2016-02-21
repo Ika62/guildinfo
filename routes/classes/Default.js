@@ -17,6 +17,4 @@ method.getGuildInfo = function(realm, name) {
   return dft;
 }
 
-
-
 module.exports = Default;

@@ -6,6 +6,10 @@ var properties = PropertiesReader('./routes/conf/conf.properties');
 var method = APICall.prototype;
 var getDefault = new Default();
 
+/**
+ * @name APICall
+ * @constructor
+ */
 function APICall() {
   this.APIKEY = properties.get('conf.apikey');
   this.URL = properties.get('conf.apiurl');

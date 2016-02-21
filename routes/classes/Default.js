@@ -3,6 +3,10 @@ var properties = PropertiesReader('./routes/conf/defaults.properties');
 
 var method = Default.prototype;
 
+/**
+ * @name Default
+ * @constructor
+ */
 function Default() {
 }
 

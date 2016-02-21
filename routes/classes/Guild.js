@@ -1,5 +1,10 @@
 var method = Guild.prototype;
 
+/**
+ * @name Guild
+ * @param name
+ * @constructor
+ */
 function Guild(name) {
   this._name = name;
 }

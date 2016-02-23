@@ -41,4 +41,21 @@ method.getPoints = function() {
   return this._points;
 };
 
+method.setEmblem = function(emblem) {
+  this._emblem = emblem;
+};
+
+method.getEmblem = function() {
+  return this._emblem;
+};
+
+method.setSide = function(side) {
+  this._side = side;
+};
+
+method.getSide = function() {
+  return this._side;
+};
+
+
 module.exports = Guild;

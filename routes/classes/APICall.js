@@ -27,6 +27,8 @@ method.getGuildInfo = function (callback, realm, name) {
       _guild.setLevel(obj.level);
       _guild.setRealm(obj.realm);
       _guild.setPoints(obj.achievementPoints);
+      _guild.setEmblem(obj.emblem);
+      _guild.setSide(obj.side);
       callback(_guild);
     }
   });

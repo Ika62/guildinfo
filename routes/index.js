@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/test', function(req, res, next) {
-
   var _guild = api.getGuildInfo(function(_guild) {
     res.render('test.twig', { guild : _guild });
   });

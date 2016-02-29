@@ -16,7 +16,7 @@ method.getGuildInfo = function(realm, name) {
     'name':''
   };
   dft.realm = (typeof realm == 'undefined')? properties.get('defaults.guildrealm') : realm;
-  dft.name =(typeof name == 'undefined')? properties.get('defaults.guildname') : name;
+  dft.name = (typeof name == 'undefined')? properties.get('defaults.guildname') : name;
 
   return dft;
 }

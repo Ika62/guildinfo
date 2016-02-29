@@ -10,14 +10,23 @@
      {% else %}
         <img class="emblem" src="/images/guild/tabards/ring-alliance.png">
      {%endif %}
+
      <img class="emblem-front" src="/images/guild/tabards/shadow_00.png">
      <img id="guild-background" class="emblem-front" src="/images/guild/tabards/bg_00.png">
 
      <img class="emblem-front" src="/images/guild/tabards/hooks.png">
-     <img class="emblem-front" src="/images/guild/tabards/overlay_00.png">
-     <img id="guild-border" class="emblem-front-border" src="/images/guild/tabards/border_0{{guild.emblem.border}}.png">
-     <img id="guild-icon" class="emblem-front-logo" src="/images/guild/tabards/emblem_{{guild.emblem.icon}}.png">
 
+     <img class="emblem-front" src="/images/guild/tabards/overlay_00.png">
+
+     {% if guild.emblem.border >= 0 %}
+        <img id="guild-border" class="emblem-front-border" src="/images/guild/tabards/border_0{{guild.emblem.border}}.png">
+     {% endif %}
+
+     {% if (guild.emblem.icon >= 0) and (guild.emblem.icon < 10) %}
+        <img id="guild-icon" class="emblem-front-logo" src="/images/guild/tabards/emblem_0{{guild.emblem.icon}}.png">
+     {% elseif (guild.emblem.icon >= 10) %}
+        <img id="guild-icon" class="emblem-front-logo" src="/images/guild/tabards/emblem_{{guild.emblem.icon}}.png">
+     {% endif %}
      </div>
 
      <h1> {{ guild.name }}</h1>
@@ -38,21 +47,55 @@
       var originalPixels = null;
       var currentPixels = null;
 
-      recolor(background, '{{ guild.emblem.backgroundColor}}');
-      recolor(border, '{{ guild.emblem.borderColor}}');
-      recolor(icon, '{{ guild.emblem.iconColor}}');
-      function recolor(img, color)
-      {
+      var _colorMap = [
+        // Background
+        {"b1002e":[5,[133,11,0]], "860f9a":[35,[108,8,128]], "fc6891":[50,[229,107,140]], "232323":[45,[15,26,31]], "ffffff":[49,[211,211,198]],
+        "04b78f":[25,[4,152,122]]},
+
+        // Border
+        {"ffffff":[14,[153,159,149]], "54370a":[13,[103,51,53]], "670021":[0,[97,42,44]], "f9cc30":[16,[155,94,28]], "0f1415":[15, [38,46,38]],
+        "00317c":[10,[55,60,100]]},
+
+        // Emblem
+        {"101517":[15,[16,20,22]], "675600":[3,[103,86,0]], "b1b8b1":[14,[177,183,176]], "00671f":[7,[0,102,30]], "636700":[4,[98,102,0]],
+        "092a5d":[10,[9,42,94]]}
+      ];
+
+      /*  To use if color index is ever added to Battlenet API.*/
+      var _colorMap2 = [
+            // Background
+            [[215,32,112],[171,0,76],[87,0,0],[225,105,26],[180,56,0],[133,11,0],[237,151,22],[205,110,0],[155,61,0],[239,207,20],[207,162,0],[158,113,0],
+            [226,216,20],[183,177,0],[133,128,0],[206,209,24],[159,161,3],[112,115,0],[153,206,27],[108,154,3],[65,108,0],[30,210,96],[4,157,63],[0,110,11],
+            [29,206,169],[4,152,122],[0,107,74],[33,177,214],[3,109,139],[0,81,111],[72,125,193],[38,85,145],[0,39,98],[188,75,195],[145,42,155],[108,8,128],
+            [202,17,191],[173,0,162],[124,0,116],[219,30,160],[149,0,97],[121,0,68],[160,108,44],[108,66,15],[53,16,0],[15,26,31],[117,124,120],[136,145,139],
+            [156,166,159],[211,211,198],[229,107,140]],
+
+            //border
+            [[97,42,44],[109,69,46],[119,101,36],[118,114,36],[108,118,36],[85,108,48],[76,109,48],[48,108,66],[48,105,107],[48,80,108],[55,60,100],[87,54,100],
+            [100,55,76],[103,51,53],[153,159,149],[38,46,38],[155,94,28]],
+
+            //icon
+            [[102,0,32],[103,35,0],[103,69,0],[103,86,0],[98,102,0],[80,102,0],[54,102,0],[0,102,30],[0,102,86],[0,72,102],[9,42,94],[86,9,94],
+            [93,10,79],[84,54,10],[177,183,176],[16,20,22],[221,163,90]]
+          ];
+
+      recolor(background, '{{ guild.emblem.backgroundColor}}', 0);
+      if(border != undefined)
+        recolor(border, '{{ guild.emblem.borderColor}}', 1);
+      if(icon != undefined)
+        recolor(icon, '{{ guild.emblem.iconColor}}', 2);
+      function recolor(img, color, type) {
           canvas.width = img.width;
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, img.width, img.height);
           originalPixels = ctx.getImageData(0, 0, img.width, img.height);
           currentPixels = ctx.getImageData(0, 0, img.width, img.height);
-
-          changeColor(img, color.substring(2,8));
+          var hexColor = color.substring(2,8);
+          var newColor = _colorMap[type][hexColor] == undefined ? hexToRGB(hexColor) : rgbConvert(_colorMap[type][hexColor][1]);
+          changeColor(img, newColor);
       }
 
-      function hexToRGB(hex){
+      function hexToRGB(hex) {
         var bigint = parseInt(hex, 16);
         var r = (bigint >> 16) & 255;
         var g = (bigint >> 8) & 255;
@@ -65,36 +108,16 @@
         };
       }
 
-      function rgbConvert(rgb){
+      function rgbConvert(rgb) {
         return {
           'R' : rgb[0],
           'G' : rgb[1],
           'B' : rgb[2]
         };
       }
-      function changeColor(img, color)
-      {
-        var backgroundMap = {"b1002e" : 5}
-        /*  To use if color index is ever added to Battlenet API. */
-        var _colorMap = [
-              // Background
-        			[[215,32,112],[171,0,76],[87,0,0],[225,105,26],[180,56,0],[133,11,0],[237,151,22],[205,110,0],[155,61,0],[239,207,20],[207,162,0],[158,113,0],
-              [226,216,20],[183,177,0],[133,128,0],[206,209,24],[159,161,3],[112,115,0],[153,206,27],[108,154,3],[65,108,0],[30,210,96],[4,157,63],[0,110,11],
-              [29,206,169],[4,152,122],[0,107,74],[33,177,214],[3,109,139],[0,81,111],[72,125,193],[38,85,145],[0,39,98],[188,75,195],[145,42,155],[108,8,128],
-              [202,17,191],[173,0,162],[124,0,116],[219,30,160],[149,0,97],[121,0,68],[160,108,44],[108,66,15],[53,16,0],[15,26,31],[117,124,120],[136,145,139],
-              [156,166,159],[211,211,198],[229,107,140]],
 
-              //border
-        			[[97,42,44],[109,69,46],[119,101,36],[118,114,36],[108,118,36],[85,108,48],[76,109,48],[48,108,66],[48,105,107],[48,80,108],[55,60,100],[87,54,100],
-              [100,55,76],[103,51,53],[153,159,149],[38,46,38],[155,94,28]],
-
-              //icon
-        			[[102,0,32],[103,35,0],[103,69,0],[103,86,0],[98,102,0],[80,102,0],[54,102,0],[0,102,30],[0,102,86],[0,72,102],[9,42,94],[86,9,94],
-              [93,10,79],[84,54,10],[177,183,176],[16,20,22],[221,163,90]]
-		        ];
-
+      function changeColor(img, newColor) {
           if(!originalPixels) return; // Check if image has loaded
-          var newColor = backgroundMap[color] == undefined ? hexToRGB(color) : rgbConvert(_colorMap[0][backgroundMap[color]]);
           var intensityScale = 19;
           var blend = 1 / 3;
           var added_r = newColor.R / intensityScale + newColor.R * blend;
@@ -173,6 +196,7 @@
       left:31px;
     }
     .emblem-front-logo {
+      z-index: 999;
       position: absolute;
       top:55px;
       left:33px;

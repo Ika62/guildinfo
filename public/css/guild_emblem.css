@@ -1,0 +1,40 @@
+img {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.emblem-container {
+  margin:0;
+  padding:0;
+  height:216px;
+  width:216px;
+  max-height:216px;
+  max-width:216px;
+  position:relative;
+  overflow:visible;
+  margin: 10px;
+}
+.emblem {
+  position: absolute;
+  top:0;
+  left:0;
+}
+.emblem-front {
+  position: absolute;
+  top:25px;
+  left:18px;
+}
+.emblem-front-border {
+  position: absolute;
+  top:38px;
+  left:31px;
+}
+.emblem-front-logo {
+  z-index: 999;
+  position: absolute;
+  top:55px;
+  left:33px;
+}

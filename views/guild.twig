@@ -1,5 +1,14 @@
 {% extends 'index.twig' %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="../css/guild_emblem.css">
+{% endblock %}
+
+{% block js %}
+<script src="../js/guild_emblem.js"></script>
+{% endblock %}
+
+
 {% block body %}
    <div align="center">
 
@@ -35,211 +44,19 @@
      <p>Points de haut-faits: {{ guild.achievementPoints }} </p>
 
    </div>
-
-    <script>
-
-    window.onload = function() {
-      var background = document.getElementById('guild-background');
-      var border = document.getElementById('guild-border');
-      var icon = document.getElementById('guild-icon');
-      var canvas = document.createElement("canvas");
-      var ctx = canvas.getContext("2d");
-      var originalPixels = null;
-      var currentPixels = null;
-
-      var _colorMap = [
-        // Background
-        {
-          "b1002e":[5,[133,11,0]],"04b78f":[25,[4,152,122]],"006391":[29,[0,81,111]],"003582":[32,[0,39,98]],"860f9a":[35,[108,8,128]],
-          "875513":[43,[108,66,15]],"232323":[45,[15,26,31]],"ffffff":[49,[211,211,198]],"fc6891":[50,[229,107,140]]
-        },
-
-        // Border
-        {
-          "670021":[0,[97,42,44]],"675600":[3,[118,114,36]],"639400":[4,[108,118,36]],"63a300":[5,[85,108,48]],"00317c":[10,[55,60,100]],
-          "54370a":[13,[103,51,53]],"ffffff":[14,[153,159,149]],"0f1415":[15,[38,46,38]],"f9cc30":[16,[155,94,28]]
-        },
-
-        // Emblem
-        {
-          "675600":[3,[103,86,0]],"636700":[4,[98,102,0]],"101517":[15,[16,20,22]],"00671f":[7,[0,102,30]],"092a5d":[10,[9,42,94]],
-          "b1b8b1":[14,[177,183,176]],"101517":[15,[16,20,22]],"dfa55a":[16,[221,163,90]]
-        }
-      ];
-
-      var test = {"guildColors":{"backgrounds":{"0":{"colorId":0,"hexRGB":"ff2088"},"1":{"colorId":1,"hexRGB":"bd005b"},
-      "2":{"colorId":2,"hexRGB":"9e0036"},"3":{"colorId":3,"hexRGB":"ff891b"},
-      "4":{"colorId":4,"hexRGB":"e14500"},"5":{"colorId":5,"hexRGB":"b1002e"},
-      "6":{"colorId":6,"hexRGB":"ffb317"},"7":{"colorId":7,"hexRGB":"f68700"},
-      "8":{"colorId":8,"hexRGB":"ae4b00"},"9":{"colorId":9,"hexRGB":"fffc14"},"10":{"colorId":10,"hexRGB":"f3ca00"},
-      "11":{"colorId":11,"hexRGB":"c49b00"},"12":{"colorId":12,"hexRGB":"ffff14"},"13":{"colorId":13,"hexRGB":"d8dd00"},
-      "14":{"colorId":14,"hexRGB":"a6ac00"},"15":{"colorId":15,"hexRGB":"e3f618"},"17":{"colorId":17,"hexRGB":"8e9700"},
-      "16":{"colorId":16,"hexRGB":"b7c003"},"19":{"colorId":19,"hexRGB":"88ba03"},"18":{"colorId":18,"hexRGB":"bcf61b"},
-      "21":{"colorId":21,"hexRGB":"1eff68"},"20":{"colorId":20,"hexRGB":"588000"},"23":{"colorId":23,"hexRGB":"00820f"},
-      "22":{"colorId":22,"hexRGB":"04c347"},"25":{"colorId":25,"hexRGB":"04b78f"},"24":{"colorId":24,"hexRGB":"1ef7c1"},
-      "27":{"colorId":27,"hexRGB":"21dcff"},"26":{"colorId":26,"hexRGB":"009061"},"29":{"colorId":29,"hexRGB":"006391"},
-      "28":{"colorId":28,"hexRGB":"009dc5"},"31":{"colorId":31,"hexRGB":"2c6aae"},"30":{"colorId":30,"hexRGB":"4d8eda"},
-      "34":{"colorId":34,"hexRGB":"ad29ac"},"35":{"colorId":35,"hexRGB":"860f9a"},"32":{"colorId":32,"hexRGB":"003582"},
-      "33":{"colorId":33,"hexRGB":"d34ac8"},"38":{"colorId":38,"hexRGB":"9b00a6"},"39":{"colorId":39,"hexRGB":"ff1fbf"},
-      "36":{"colorId":36,"hexRGB":"ff38fa"},"37":{"colorId":37,"hexRGB":"c900c3"},"42":{"colorId":42,"hexRGB":"c58132"},
-      "43":{"colorId":43,"hexRGB":"875513"},"40":{"colorId":40,"hexRGB":"d30087"},"41":{"colorId":41,"hexRGB":"a30068"},
-      "46":{"colorId":46,"hexRGB":"646464"},"47":{"colorId":47,"hexRGB":"b4bba8"},"44":{"colorId":44,"hexRGB":"4f2300"},
-      "45":{"colorId":45,"hexRGB":"232323"},"50":{"colorId":50,"hexRGB":"fc6891"},"49":{"colorId":49,"hexRGB":"ffffff"},
-      "48":{"colorId":48,"hexRGB":"d7ddcb"}},
-
-      "icons":{"0":{"colorId":0,"hexRGB":"670021"},"1":{"colorId":1,"hexRGB":"672300"},"2":{"colorId":2,"hexRGB":"674500"},
-      "3":{"colorId":3,"hexRGB":"675600"},"4":{"colorId":4,"hexRGB":"636700"},"5":{"colorId":5,"hexRGB":"516700"},
-      "6":{"colorId":6,"hexRGB":"376700"},"7":{"colorId":7,"hexRGB":"00671f"},"8":{"colorId":8,"hexRGB":"006757"},
-      "9":{"colorId":9,"hexRGB":"004867"},"10":{"colorId":10,"hexRGB":"092a5d"},"11":{"colorId":11,"hexRGB":"56095d"},
-      "12":{"colorId":12,"hexRGB":"5d094f"},"13":{"colorId":13,"hexRGB":"54370a"},"14":{"colorId":14,"hexRGB":"b1b8b1"},
-      "15":{"colorId":15,"hexRGB":"101517"},"16":{"colorId":16,"hexRGB":"dfa55a"}},
-
-      "borders":{"0":{"colorId":0,"hexRGB":"670021"},"1":{"colorId":1,"hexRGB":"672300"},"2":{"colorId":2,"hexRGB":"674500"},
-      "3":{"colorId":3,"hexRGB":"675600"},"4":{"colorId":4,"hexRGB":"639400"},"5":{"colorId":5,"hexRGB":"63a300"},
-      "6":{"colorId":6,"hexRGB":"63b300"},"7":{"colorId":7,"hexRGB":"00671f"},"8":{"colorId":8,"hexRGB":"008e90"},
-      "9":{"colorId":9,"hexRGB":"006793"},"10":{"colorId":10,"hexRGB":"00317c"},"11":{"colorId":11,"hexRGB":"6d0077"},
-      "12":{"colorId":12,"hexRGB":"7b0067"},"13":{"colorId":13,"hexRGB":"54370a"},"14":{"colorId":14,"hexRGB":"ffffff"},
-      "15":{"colorId":15,"hexRGB":"0f1415"},"16":{"colorId":16,"hexRGB":"f9cc30"}}}}
-
-      /*  To use if color index is ever added to Battlenet API.*/
-      var _colorMap2 = [
-            // Background
-            [[215,32,112],[171,0,76],[87,0,0],[225,105,26],[180,56,0],[133,11,0],[237,151,22],[205,110,0],[155,61,0],[239,207,20],[207,162,0],[158,113,0],
-            [226,216,20],[183,177,0],[133,128,0],[206,209,24],[159,161,3],[112,115,0],[153,206,27],[108,154,3],[65,108,0],[30,210,96],[4,157,63],[0,110,11],
-            [29,206,169],[4,152,122],[0,107,74],[33,177,214],[3,109,139],[0,81,111],[72,125,193],[38,85,145],[0,39,98],[188,75,195],[145,42,155],[108,8,128],
-            [202,17,191],[173,0,162],[124,0,116],[219,30,160],[149,0,97],[121,0,68],[160,108,44],[108,66,15],[53,16,0],[15,26,31],[117,124,120],[136,145,139],
-            [156,166,159],[211,211,198],[229,107,140]],
-
-            //border
-            [[97,42,44],[109,69,46],[119,101,36],[118,114,36],[108,118,36],[85,108,48],[76,109,48],[48,108,66],[48,105,107],[48,80,108],[55,60,100],[87,54,100],
-            [100,55,76],[103,51,53],[153,159,149],[38,46,38],[155,94,28]],
-
-            //icon
-            [[102,0,32],[103,35,0],[103,69,0],[103,86,0],[98,102,0],[80,102,0],[54,102,0],[0,102,30],[0,102,86],[0,72,102],[9,42,94],[86,9,94],
-            [93,10,79],[84,54,10],[177,183,176],[16,20,22],[221,163,90]]
-          ];
-
-      recolor(background, '{{ guild.emblem.backgroundColor}}', 0);
-      if(border != undefined)
-        recolor(border, '{{ guild.emblem.borderColor}}', 1);
-      if(icon != undefined)
-        recolor(icon, '{{ guild.emblem.iconColor}}', 2);
-      function recolor(img, color, type) {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, img.width, img.height);
-          originalPixels = ctx.getImageData(0, 0, img.width, img.height);
-          currentPixels = ctx.getImageData(0, 0, img.width, img.height);
-          var hexColor = color.substring(2,8);
-          var newColor = _colorMap[type][hexColor] == undefined ? hexToRGB(hexColor) : rgbConvert(_colorMap[type][hexColor][1]);
-          changeColor(img, newColor);
-      }
-
-      function hexToRGB(hex) {
-        var bigint = parseInt(hex, 16);
-        var r = (bigint >> 16) & 255;
-        var g = (bigint >> 8) & 255;
-        var b = bigint & 255;
-
-        return {
-          'R' : r,
-          'G' : g,
-          'B' : b
-        };
-      }
-
-      function rgbConvert(rgb) {
-        return {
-          'R' : rgb[0],
-          'G' : rgb[1],
-          'B' : rgb[2]
-        };
-      }
-
-      function changeColor(img, newColor) {
-          if(!originalPixels) return; // Check if image has loaded
-          var intensityScale = 19;
-          var blend = 1 / 3;
-          var added_r = newColor.R / intensityScale + newColor.R * blend;
-          var added_g = newColor.G / intensityScale + newColor.G * blend;
-          var added_b = newColor.B / intensityScale + newColor.B * blend;
-          var scale_r = newColor.R / 255 + blend;
-          var scale_g = newColor.G / 255 + blend;
-          var scale_b = newColor.B / 255 + blend;
-
-          for(var I = 0, L = originalPixels.data.length; I < L; I += 4)
-          {
-              if(currentPixels.data[I + 3] > 0) // If it's not a transparent pixel
-              {
-                  currentPixels.data[I] =  originalPixels.data[I] * scale_r + added_r;
-                  currentPixels.data[I + 1] =  originalPixels.data[I + 1]  * scale_g + added_g;
-                  currentPixels.data[I + 2] =  originalPixels.data[I + 2] * scale_b + added_b;
-              }
-          }
-
-          ctx.putImageData(currentPixels, 0, 0);
-          img.src = canvas.toDataURL("image/png");
-      }
-        }
-
-    </script>
 {% endblock %}
 
-{% block stylesheets %}
-<style>
-    body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
-    h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
-    h1 { font-size: 36px; }
-    h2 { font-size: 21px; margin-bottom: 1em; }
-    p { margin: 0 0 1em 0; }
-    a { color: #0000F0; }
-    a:hover { text-decoration: none; }
-    code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
-    #welcome h1 span { display: block; font-size: 75%; }
-    @media (min-width: 768px) {
-        #status a, #next a { display: block; }
-        @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-    }
-    img {
-      user-drag: none;
-      user-select: none;
-      -moz-user-select: none;
-      -webkit-user-drag: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-    }
-    .emblem-container {
-      margin:0;
-      padding:0;
-      height:216px;
-      width:216px;
-      max-height:216px;
-      max-width:216px;
-      position:relative;
-      overflow:visible;
-      margin: 10px;
-    }
-    .emblem {
-      position: absolute;
-      top:0;
-      left:0;
-    }
-    .emblem-front {
-      position: absolute;
-      top:25px;
-      left:18px;
-    }
-    .emblem-front-border {
-      position: absolute;
-      top:38px;
-      left:31px;
-    }
-    .emblem-front-logo {
-      z-index: 999;
-      position: absolute;
-      top:55px;
-      left:33px;
-    }
-</style>
+{% block javascripts %}
+<script>
+  window.onload = function() {
+    var background = document.getElementById('guild-background');
+    var border = document.getElementById('guild-border');
+    var icon = document.getElementById('guild-icon');
+    recolor(background, '{{ guild.emblem.backgroundColor}}', 0);
+    if(border != undefined)
+      recolor(border, '{{ guild.emblem.borderColor}}', 1);
+    if(icon != undefined)
+      recolor(icon, '{{ guild.emblem.iconColor}}', 2);
+  }
+</script>
 {% endblock %}

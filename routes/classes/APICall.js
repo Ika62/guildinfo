@@ -20,7 +20,7 @@ function APICall() {
 
 method.getGuildInfo = function (callback, realm, name) {
   var dft = getDefault.getGuildInfo(realm, name);
-  var call_url = this.URL + "guild/" + dft.realm + "/" + dft.name + "?locale=" + this.LOCALE + "&apikey=" + this.APIKEY;
+  var call_url = this.URL + "guild/" + dft.realm + "/" + dft.name + "?fields=members&locale=" + this.LOCALE + "&apikey=" + this.APIKEY;
   console.log(call_url);
   request(call_url, function (error, response, body) {
     if (!error && response.statusCode == 200) {

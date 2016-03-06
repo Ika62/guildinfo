@@ -1,11 +1,24 @@
 {% extends 'index.twig' %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="../css/guild_emblem.css">
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css"/>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="../css/guild_emblem.css"/>
+<style>
+.toolbar {
+    float: left;
+}
+</style>
 {% endblock %}
 
 {% block js %}
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script src="../js/guild_emblem.js"></script>
+<script src="../js/guild-members.js"></script>
 {% endblock %}
 
 
@@ -38,25 +51,59 @@
      {% endif %}
      </div>
 
+<div>
      <h1> {{ guild.name }}</h1>
      <p>Serveur: {{ guild.realm }} </p>
      <p>Niveau: {{ guild.level }} </p>
      <p>Points de haut-faits: {{ guild.achievementPoints }} </p>
+
+</div>
+
+<h2>Membres</h2>
+
+<div style="min-width: 400px;margin-bottom: 10px;">
+  <p><b>Niveau</b></p>
+  <input type="text" id="level-min" readonly style="width:50px;display:inline-block;border:0; color:#337AB7; font-weight:bold;text-align:center;">
+  <div id="level-range" style="width:250px;min-width:100px;display:inline-block;"></div>
+  <input type="text" id="level-max" readonly style="width:50px;display:inline-block;border:0; color:#337AB7; font-weight:bold;text-align:center;">
+</div>
+
+     <table id="members" class="table table-striped table-bordered" style="min-width: 400px">
+       <thead>
+       <tr>
+         <th>Nom</td>
+        <th>Royaume</td>
+         <th>Niveau</td>
+       </tr>
+      </thead>
+       <tbody>
+       {%for char in guild.members %}
+          <tr>
+            <td>{{ char.character.name }}</td>
+            <td>{{char.character.realm}}</td>
+            <td>{{char.character.level}}</td>
+
+          </tr>
+       {% endfor %}
+     </tbody>
+     </table>
 
    </div>
 {% endblock %}
 
 {% block javascripts %}
 <script>
-  window.onload = function() {
-    var background = document.getElementById('guild-background');
-    var border = document.getElementById('guild-border');
-    var icon = document.getElementById('guild-icon');
-    recolor(background, '{{ guild.emblem.backgroundColor}}', 0);
-    if(border != undefined)
-      recolor(border, '{{ guild.emblem.borderColor}}', 1);
-    if(icon != undefined)
-      recolor(icon, '{{ guild.emblem.iconColor}}', 2);
-  }
+
+window.onload = function() {
+
+  var background = document.getElementById('guild-background');
+  var border = document.getElementById('guild-border');
+  var icon = document.getElementById('guild-icon');
+  recolor(background, '{{ guild.emblem.backgroundColor}}', 0);
+  if(border != undefined)
+    recolor(border, '{{ guild.emblem.borderColor}}', 1);
+  if(icon != undefined)
+    recolor(icon, '{{ guild.emblem.iconColor}}', 2);
+}
 </script>
 {% endblock %}
